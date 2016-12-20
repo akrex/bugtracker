@@ -1,0 +1,15 @@
+{% extends 'global/_main.html' %}
+{% block tittle %}Login{% endblock %}
+
+{% block body %}
+<form class="form-horizontal" action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include 'global/form-template.html' %}
+    <p> Don't have an account? <a href="{% url 'user:register' %}">Click there</a></p>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success">Sing in</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

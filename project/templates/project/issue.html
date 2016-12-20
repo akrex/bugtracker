@@ -1,0 +1,65 @@
+{% extends 'global/_main.html' %}
+{% block tittle %}Issues{% endblock %}
+
+{% block body %}
+    <div class="media well">
+        <div style="width:130px" class="pull-left" href="#">
+            <strong><a href="{% url 'user:user' issue.owner_id %}">{{ issue.owner.username }}</a></strong>
+            <br/>
+            <small>Author</small>
+            <br/>
+            <br/>
+            <br/>
+            <p>Status: <strong>{{ issue.status.name }}</strong></p>
+            <p>Topic: <strong>{{ issue.topic.name }}</strong></p>
+        </div>
+        <div class="media-body text-right">
+            <div>
+                <div class="pull-left lead">Project: <a
+                        href="{% url 'project:project' issue.project_id %}">{{ issue.project.name }}</a></div>
+                <div class="forum-post-panel btn-group btn-group-xs">
+                    <i class="fa fa-clock-o">{{ issue.created }}</i>
+                </div>
+            </div>
+            <div style="padding: 8px;" class="text-center">
+                <h2 class="blog-post-title">{{ issue.tittle }}</h2>
+                <p class="text-left">{{ issue.comment }}</p>
+            </div>
+        </div>
+    </div>
+
+
+    {% if request.user.is_authenticated and request.user.pk == issue.owner_id or request.user.pk == issue.project.owner_id %}
+        <a class="btn btn-warning" href="{% url 'project:issue-update' issue.project_id issue.pk %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'project:issue-delete' issue.project_id issue.pk %}">Delete</a>
+    {% endif %}
+    <h3>Comments</h3>
+    <ul class="media-list forum">
+        {% for comment in issue.issuecomment_set.all %}
+            <!-- Forum Post -->
+            <li class="media well">
+                <div class="pull-left user-info" style="width:130px" href="#">
+                    <strong><a href="{% url 'user:user' comment.owner_id %}">{{ comment.owner.username }}</a></strong>
+                </div>
+                <div class="media-body text-right">
+                    <div class="forum-post-panel btn-group btn-group-xs">
+                        <i class="fa fa-clock-o">Posted {{ comment.created }}
+                            {% if request.user.is_authenticated and request.user.pk == comment.owner_id or request.user.pk == issue.project.owner_id %}
+                                <a href="{% url 'project:issue-comment-update' issue.project_id issue.pk comment.pk %}">Edit</a>
+                                <a href="{% url 'project:issue-comment-delete' issue.project_id issue.pk comment.pk %}">Delete</a>
+                            {% endif %}
+                    </div>
+                    <div class="text-center">
+                        <strong>{{ post.tittle }}</strong>
+                        <p class="text-left">{{ comment.comment }}</p>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'project:issue-comment-add' issue.project_id issue.pk %}" class="btn btn-default">Add
+            comment</a>
+    {% endif %}
+{% endblock %}

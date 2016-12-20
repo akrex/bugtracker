@@ -1,0 +1,22 @@
+{% extends 'global/_main.html' %}
+{% block tittle %}All projects{% endblock %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Project name</th><th>Owner</th><th>Actions</th>
+            </tr>
+        </thead>
+    {% for project in all_projects %}
+    <tr>
+        <td>{{ project.name }}</td>
+        <td><a href="{% url 'user:user' project.owner_id %}">{{ project.owner.username }}</a></td>
+        <td><a href="{{ project.get_absolute_url }}" class="btn btn-primary">Detail</a></td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'project:project-add' %}" class="btn btn-primary">Add</a>
+    {% endif %}
+{% endblock %}
