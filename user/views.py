@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.views import generic
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -30,7 +29,7 @@ class UserFormView(generic.View):
             user.save()
             return redirect('user:login')
 
-        return render(request, self.template_name, {'form' : form})
+        return render(request, self.template_name, {'form': form})
 
 
 class UserLoginView(generic.View):
@@ -59,4 +58,3 @@ class UserLoginView(generic.View):
 def logout_view(request):
     logout(request)
     return redirect('user:login')
-
