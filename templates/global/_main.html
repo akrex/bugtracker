@@ -8,6 +8,15 @@
     <script src="{% static 'js/jquery-3.1.1.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
     <title>{% block tittle %}{% endblock %} - My bug tracker</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!Notification) {
+            return;
+          }
+          if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        });
+    </script>
 </head>
 <body>
 
@@ -25,6 +34,9 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="{% url 'project:index' %}">Home</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'project:my-projects' %}">My projects</a></li>
+            {% endif %}
             <li><a href="{% url 'project:about' %}">About</a></li>
           </ul>
             <ul class="nav navbar-nav navbar-right">

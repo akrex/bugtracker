@@ -2,6 +2,9 @@
 {% block tittle %}Issues{% endblock %}
 
 {% block body %}
+    {% if issue.status_id == 6 %}
+        <p class="bg-danger" id="info">Closed</p>
+    {% endif %}
     <div class="media well">
         <div style="width:130px" class="pull-left" href="#">
             <strong><a href="{% url 'user:user' issue.owner_id %}">{{ issue.owner.username }}</a></strong>
@@ -57,8 +60,7 @@
             </li>
         {% endfor %}
     </ul>
-
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated and issue.status_id != 6 %}
         <a href="{% url 'project:issue-comment-add' issue.project_id issue.pk %}" class="btn btn-default">Add
             comment</a>
     {% endif %}

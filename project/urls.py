@@ -22,6 +22,7 @@ app_name = "project"
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^my/$', views.MyProjectView.as_view(), name='my-projects'),
     url(r'^(?P<pk>[0-9]+)/$', views.ProjectView.as_view(), name='project'),
     url(r'^add/$', views.ProjectAddView.as_view(), name='project-add'),
     url(r'^about/$', views.ProjectAboutView.as_view(), name='about'),

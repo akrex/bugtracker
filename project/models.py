@@ -39,6 +39,7 @@ class Issue(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.SET(1))
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created = models.DateTimeField()
+    is_new = models.BooleanField()
 
     def get_absolute_url(self):
         return reverse('project:issue', args=[str(self.project_id), str(self.pk)])
@@ -49,6 +50,7 @@ class IssueComment(models.Model):
     created = models.DateTimeField()
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    is_new = models.BooleanField()
 
     def get_absolute_url(self):
         return reverse('project:issue', args=[str(self.issue.project_id), str(self.issue_id)])

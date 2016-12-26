@@ -59,3 +59,4 @@ class UserLoginView(generic.View):
 def logout_view(request):
     logout(request)
     return redirect('user:login')
+

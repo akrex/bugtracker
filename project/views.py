@@ -11,8 +11,8 @@ def login_check(funct):
         if obj.request.user.id is None:
             return redirect('user:login')
         return funct(obj, *args, **kwargs)
-    return func_wrapper
 
+    return func_wrapper
 
 
 class IndexView(generic.ListView):
@@ -21,6 +21,18 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Project.objects.all()
+
+
+class MyProjectView(generic.ListView):
+    template_name = 'project/index.html'
+    context_object_name = 'all_projects'
+
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user.id)
+
+    @login_check
+    def dispatch(self, *args, **kwargs):
+        return super(MyProjectView, self).dispatch(*args, **kwargs)
 
 
 class ProjectView(generic.DetailView):
@@ -81,6 +93,7 @@ class IssueAddView(generic.CreateView):
         form.instance.owner_id = self.request.user.id
         form.instance.status_id = 1
         form.instance.created = datetime.datetime.now()
+        form.instance.is_new = True
         return super(IssueAddView, self).form_valid(form)
 
 
@@ -116,6 +129,7 @@ class IssueCommentAddView(generic.CreateView):
         form.instance.issue_id = self.kwargs['issue_id']
         form.instance.owner_id = self.request.user.id
         form.instance.created = datetime.datetime.now()
+        form.instance.is_new = True
         return super(IssueCommentAddView, self).form_valid(form)
 
 
